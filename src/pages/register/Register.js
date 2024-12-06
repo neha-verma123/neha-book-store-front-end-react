@@ -29,7 +29,10 @@ export default function Register() {
         <button
           className="registerButton"
           type="button"
-          onClick={() => navigate("/home")}
+          onClick={() => {
+            alert("Coming Soon!");
+            navigate("/");
+          }}
         >
           Register
         </button>
@@ -37,7 +40,9 @@ export default function Register() {
       <button
         className="registerLoginButton"
         type="button"
-        onClick={() => navigate("/")}
+        onClick={() => {
+          navigate("/login");
+        }}
       >
         Login
       </button>

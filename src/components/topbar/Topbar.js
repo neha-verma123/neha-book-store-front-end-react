@@ -18,7 +18,7 @@ export default function Topbar() {
             </Link>
           </li>
           <li className="topListItem">
-            <Link className="link" to="/">
+            <Link className="link" to="/login">
               LOGIN
             </Link>
           </li>
@@ -31,13 +31,11 @@ export default function Topbar() {
         </ul>
       </div>
       <div className="topRight">
-        <Link className="link" to="/settings">
-          <img
-            className="topImg"
-            src="https://images.pexels.com/photos/1858175/pexels-photo-1858175.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
-            alt=""
-          />
-        </Link>
+        <img
+          className="topImg"
+          src="https://images.pexels.com/photos/1858175/pexels-photo-1858175.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+          alt=""
+        />
 
         <i className="topSearchIcon fas fa-search"></i>
       </div>

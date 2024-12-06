@@ -22,7 +22,10 @@ export default function Login() {
         <button
           className="loginButton"
           type="button"
-          onClick={() => navigate("/home")}
+          onClick={() => {
+            alert("Coming Soon!");
+            navigate("/");
+          }}
         >
           Login
         </button>
