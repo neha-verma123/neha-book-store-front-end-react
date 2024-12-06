@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./Product.css";
-
 export default function Product({ data }) {
   const navigate = useNavigate();
   return (
@@ -11,10 +10,12 @@ export default function Product({ data }) {
     >
       <img
         className="postImg"
-        src={
-          "https://media.istockphoto.com/id/173015527/photo/a-single-red-book-on-a-white-surface.jpg?s=612x612&w=0&k=20&c=AeKmdZvg2_bRY2Yct7odWhZXav8CgDtLMc_5_pjSItY="
+        src={data?.image || "fallback-image-url.jpg"}
+        alt="NO_IMAGE_AVAILABLE"
+        onError={(e) =>
+          (e.target.src =
+            "https://upload.wikimedia.org/wikipedia/commons/1/14/No_Image_Available.jpg")
         }
-        alt=""
       />
       <div className="postInfo">
         <span className="postTitle">{data?.title}</span>
