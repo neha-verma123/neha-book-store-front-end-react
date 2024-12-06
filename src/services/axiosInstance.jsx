@@ -2,7 +2,7 @@ import axios from "axios";
 import { axiosError } from "./axiosError";
 
 const axiosInstance = axios.create({
-  baseURL: `https://dummyjson.com`,
+  baseURL: "https://neha-book-store-backend.onrender.com/",
   headers: {
     "Content-Type": "application/json",
   },

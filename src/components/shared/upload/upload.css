@@ -1,0 +1,17 @@
+.fileUpload {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px dashed #ccc;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  margin-top: 1rem;
+}
+
+.browseButton {
+  background-color: #f0f0f0;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+}

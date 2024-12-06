@@ -1,28 +1,93 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import { validationMessage } from "../../constants/validationMessage";
+import { ErrorMessage } from "@hookform/error-message";
+import UploadImage from "../shared/upload/UploadImage";
+import "./AddBookModal.css";
 
 const AddBookModal = ({ onHide, show }) => {
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    setValue,
+    watch,
+  } = useForm();
+
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [preview, setPreview] = useState(null);
+
+  const onSubmit = (data) => {
+    console.log("DATA", data);
+  };
+
+  const handelFileSelect = (value) => {
+    if (value) {
+      const file = value;
+      if (file) {
+        setSelectedFile(file);
+        const filePreview = URL.createObjectURL(file);
+        setPreview(filePreview);
+      }
+    }
+  };
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header closeButton>
         <Modal.Title>Add New Book</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form className="p-3">
+        <Form
+          className="p-3"
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+          autoComplete="off"
+        >
           <Form.Group className="mb-3">
             <Form.Label>Book Title</Form.Label>
-            <Form.Control type="text" placeholder="Enter book title" required />
+            <Form.Control
+              type="text"
+              placeholder="Enter book title"
+              name="bookTitle"
+              {...register("bookTitle", {
+                required: validationMessage.bookTitle,
+              })}
+            />
+            <ErrorMessage
+              errors={errors}
+              name="bookTitle"
+              render={({ message }) => (
+                <p className="error-message text-start py-2 px-1 text-danger">
+                  {message}
+                </p>
+              )}
+            />
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Book Category</Form.Label>
-            <Form.Select>
-              <option>Select category</option>
-              <option>Fiction</option>
-              <option>Non-Fiction</option>
-              <option>Science</option>
-              <option>History</option>
+            <Form.Select
+              name="bookCategory"
+              {...register("bookCategory", {
+                required: validationMessage.bookTitle,
+              })}
+            >
+              <option value="">Select category</option>
+              <option value="fiction">Fiction</option>
+              <option value="non-fiction">Non-Fiction</option>
+              <option value="science">Science</option>
+              <option value="history">History</option>
             </Form.Select>
+            <ErrorMessage
+              errors={errors}
+              name="bookCategory"
+              render={({ message }) => (
+                <p className="error-message text-start py-2 px-1 text-danger">
+                  {message}
+                </p>
+              )}
+            />
           </Form.Group>
 
           <Form.Group className="mb-3">
@@ -32,31 +97,66 @@ const AddBookModal = ({ onHide, show }) => {
               rows={3}
               placeholder="Enter book description"
               style={{ resize: "none" }}
+              name="bookDescription"
+              {...register("bookDescription", {
+                required: validationMessage.bookTitle,
+              })}
+            />
+            <ErrorMessage
+              errors={errors}
+              name="bookDescription"
+              render={({ message }) => (
+                <p className="error-message text-start py-2 px-1 text-danger">
+                  {message}
+                </p>
+              )}
             />
           </Form.Group>
 
           <Form.Group className="mb-3">
             <Form.Label>Book Image</Form.Label>
-            <Form.Control type="file" />
+            <UploadImage
+              handleOnChange={handelFileSelect}
+              previewImage={preview}
+            />
+
+            <div className={"profilePhotoPreview"}>
+              {preview && (
+                <img
+                  className={"uploadedImage"}
+                  src={
+                    selectedFile.type == "application/pdf"
+                      ? "https://i.pinimg.com/736x/81/97/55/81975517a51651e8f8940759360d01da.jpg"
+                      : selectedFile.type ==
+                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                      ? "https://image.similarpng.com/very-thumbnail/2021/09/Microsoft-Excel-icon-design-on-transparent-background-PNG.png"
+                      : preview
+                  }
+                  alt="No_Uploaded_Image"
+                />
+              )}
+            </div>
           </Form.Group>
+          <div className="d-flex justify-content-between align-items-center mt-3">
+            <Button
+              variant="outline-danger"
+              className="px-4 py-2 fw-bold shadow-sm"
+              onClick={onHide}
+              type="button"
+            >
+              <i className="bi bi-x-circle me-2"></i> Close
+            </Button>
+            <Button
+              variant="primary"
+              className="px-4 py-2 fw-bold shadow-sm"
+              style={{ backgroundColor: "#728158" }}
+              type="submit"
+            >
+              Submit
+            </Button>
+          </div>
         </Form>
       </Modal.Body>
-      <Modal.Footer className="d-flex justify-content-between align-items-center">
-        <Button
-          variant="outline-danger"
-          className="px-4 py-2 fw-bold shadow-sm"
-          onClick={onHide}
-        >
-          <i className="bi bi-x-circle me-2"></i> Close
-        </Button>
-        <Button
-          variant="primary"
-          onClick={() => alert("Form submitted!")}
-          className="px-4 py-2 fw-bold shadow-sm"
-        >
-          <i className="bi bi-check-circle me-2"></i> Save Changes
-        </Button>
-      </Modal.Footer>
     </Modal>
   );
 };

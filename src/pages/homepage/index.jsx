@@ -5,7 +5,7 @@ import "./homepage.css";
 
 export default function Homepage() {
   const location = useLocation();
-  console.log(location);
+
   return (
     <>
       <TopBanner />
