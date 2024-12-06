@@ -45,7 +45,11 @@ export default function ProductList() {
         })}
 
       {visibleAddBookPopup && (
-        <AddBookModal show={visibleAddBookPopup} onHide={toggleAddBookPopup} />
+        <AddBookModal
+          show={visibleAddBookPopup}
+          onHide={toggleAddBookPopup}
+          fetchProductList={fetchProductList}
+        />
       )}
     </div>
   );

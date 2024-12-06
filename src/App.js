@@ -4,9 +4,8 @@ import MainLayout from "./Layout";
 import Login from "./pages/login";
 import Register from "./pages/register/Register";
 import ProductDetails from "./pages/ProductDetails";
-import Cart from "./pages/cart";
 import "./assets/styles/style.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function App() {
   return (
@@ -17,7 +16,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/product-details/:id" element={<ProductDetails />} />
-          <Route path="/cart" element={<Cart />} />
         </Routes>
       </MainLayout>
     </Router>

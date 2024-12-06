@@ -1,4 +1,4 @@
 export const pathObj = {
-  PRODUCTS: "/",
-  PROJECT_DETAILS: "/products",
+  LIST: "/",
+  ADD_BOOk: "/",
 };

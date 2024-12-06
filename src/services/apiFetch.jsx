@@ -4,12 +4,24 @@ function apiGet(url, params = {}) {
   return axiosInstance.get(url, { params });
 }
 
-function apiPost(url, body, config) {
-  return axiosInstance.post(url, body, config);
+function apiPost(url, body, contentType = "application/json") {
+  const headers = {
+    "Content-Type": contentType,
+  };
+
+  return axiosInstance.post(url, body, {
+    headers,
+  });
 }
 
-function apiPut(url, body, config) {
-  return axiosInstance.put(url, body, config);
+function apiPut(url, body, contentType = "application/json") {
+  const headers = {
+    "Content-Type": contentType,
+  };
+
+  return axiosInstance.put(url, body, {
+    headers,
+  });
 }
 
 function apiDelete(url) {

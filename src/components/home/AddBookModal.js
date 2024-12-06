@@ -5,8 +5,11 @@ import { validationMessage } from "../../constants/validationMessage";
 import { ErrorMessage } from "@hookform/error-message";
 import UploadImage from "../shared/upload/UploadImage";
 import "./AddBookModal.css";
+import { integerInput } from "../../helper/helper";
+import { apiPost } from "../../services/apiFetch";
+import { pathObj } from "../../services/pathObj";
 
-const AddBookModal = ({ onHide, show }) => {
+const AddBookModal = ({ onHide, show, fetchProductList }) => {
   const {
     register,
     formState: { errors },
@@ -18,20 +21,42 @@ const AddBookModal = ({ onHide, show }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [preview, setPreview] = useState(null);
 
-  const onSubmit = (data) => {
-    console.log("DATA", data);
-  };
+  const onSubmit = async (data) => {
+    const formData = new FormData();
 
-  const handelFileSelect = (value) => {
-    if (value) {
-      const file = value;
-      if (file) {
-        setSelectedFile(file);
-        const filePreview = URL.createObjectURL(file);
-        setPreview(filePreview);
+    formData.append("title", data?.bookTitle || "");
+    formData.append("category", data?.bookCategory || "");
+    formData.append("price", data?.bookPrice || "");
+    formData.append("description", data?.bookDescription || "");
+
+    if (selectedFile) {
+      formData.append("image", selectedFile);
+    }
+    try {
+      const res = await apiPost(
+        pathObj.ADD_BOOk,
+        formData,
+        "multipart/form-data"
+      );
+      if (res.status === 200) {
+        fetchProductList();
+        onHide();
       }
+    } catch (error) {
+      console.error("error:", error);
     }
   };
+
+  const handleFileSelect = (file) => {
+    if (file) {
+      setSelectedFile(file);
+      const filePreview = URL.createObjectURL(file);
+      setPreview(filePreview);
+    }
+  };
+
+  console.log("preview", preview);
+
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header closeButton>
@@ -91,6 +116,29 @@ const AddBookModal = ({ onHide, show }) => {
           </Form.Group>
 
           <Form.Group className="mb-3">
+            <Form.Label>Book Price</Form.Label>
+            <Form.Control
+              type="text"
+              placeholder="Enter book title"
+              name="bookPrice"
+              {...register("bookPrice", {
+                required: validationMessage.bookTitle,
+              })}
+              maxLength={4}
+              onKeyPress={(e) => integerInput(e)}
+            />
+            <ErrorMessage
+              errors={errors}
+              name="bookPrice"
+              render={({ message }) => (
+                <p className="error-message text-start py-2 px-1 text-danger">
+                  {message}
+                </p>
+              )}
+            />
+          </Form.Group>
+
+          <Form.Group className="mb-3">
             <Form.Label>Book Description</Form.Label>
             <Form.Control
               as="textarea"
@@ -116,19 +164,19 @@ const AddBookModal = ({ onHide, show }) => {
           <Form.Group className="mb-3">
             <Form.Label>Book Image</Form.Label>
             <UploadImage
-              handleOnChange={handelFileSelect}
+              handleOnChange={handleFileSelect}
               previewImage={preview}
             />
-
-            <div className={"profilePhotoPreview"}>
+            <div className="profilePhotoPreview">
               {preview && (
                 <img
-                  className={"uploadedImage"}
+                  className="uploadedImage"
                   src={
-                    selectedFile.type == "application/pdf"
+                    selectedFile && selectedFile.type === "application/pdf"
                       ? "https://i.pinimg.com/736x/81/97/55/81975517a51651e8f8940759360d01da.jpg"
-                      : selectedFile.type ==
-                        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                      : selectedFile &&
+                        selectedFile.type ===
+                          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                       ? "https://image.similarpng.com/very-thumbnail/2021/09/Microsoft-Excel-icon-design-on-transparent-background-PNG.png"
                       : preview
                   }
@@ -137,6 +185,7 @@ const AddBookModal = ({ onHide, show }) => {
               )}
             </div>
           </Form.Group>
+
           <div className="d-flex justify-content-between align-items-center mt-3">
             <Button
               variant="outline-danger"

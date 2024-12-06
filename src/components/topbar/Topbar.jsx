@@ -1,11 +1,7 @@
 import { Link } from "react-router-dom";
 import "./topbar.css";
-// import { useSelector } from "react-redux";
 
 export default function Topbar() {
-  // const { CART_STATE } = useSelector((state) => ({
-  //   CART_STATE: state?.shoppingReducer?.cartData || [],
-  // }));
   return (
     <div className="top">
       <div className="topLeft">
@@ -30,14 +26,6 @@ export default function Topbar() {
             {" "}
             <Link className="link" to="/register">
               REGISTER{" "}
-            </Link>
-          </li>
-          <li className="topListItem">
-            <Link className="link" to="/cart">
-              CART
-              {/* {CART_STATE?.length ? ( */}
-              <span className="itemCart">0</span>
-              {/* // ) : null} */}
             </Link>
           </li>
         </ul>

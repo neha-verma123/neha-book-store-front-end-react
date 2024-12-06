@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import "./upload.css";
 
 const UploadImage = ({ handleOnChange, previewImage }) => {
   const fileInput = useRef();
 
-  // ALL STATE
   const [file, setFile] = useState(null);
   const [photoURL, setPhotoURL] = useState(previewImage);
 
@@ -16,9 +15,9 @@ const UploadImage = ({ handleOnChange, previewImage }) => {
     (event) => {
       const files = event.target.files;
       if (files && files.length > 0) {
-        const file = files[0];
+        const selectedFile = files[0];
 
-        if (file.size > 200 * 1024 * 1024) {
+        if (selectedFile.size > 200 * 1024 * 1024) {
           alert("File size should not exceed 200 MB.");
           return;
         }
@@ -30,12 +29,14 @@ const UploadImage = ({ handleOnChange, previewImage }) => {
           "image/webp",
         ];
 
-        if (!acceptedFormats.includes(file.type)) {
+        if (!acceptedFormats.includes(selectedFile.type)) {
           alert("Only image formats are allowed.");
           return;
         }
-        setFile(Array.from(files));
-        setPhotoURL(URL.createObjectURL(file));
+
+        setFile(selectedFile);
+        setPhotoURL(URL.createObjectURL(selectedFile));
+        handleOnChange(selectedFile);
       }
     },
     [handleOnChange]
@@ -54,7 +55,7 @@ const UploadImage = ({ handleOnChange, previewImage }) => {
           style={{ display: "none" }}
           ref={fileInput}
           onChange={handleChange}
-          onClick={(e) => (e.target.value = null)} // Reset file input value to allow the same file upload again
+          onClick={(e) => (e.target.value = null)}
         />
         <div className="flex items-center cursor-pointer">
           <svg
@@ -65,19 +66,15 @@ const UploadImage = ({ handleOnChange, previewImage }) => {
             fill="none"
           >
             <path
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
               d="M3.75 2.5V5H2.5V2.5C2.5 2.16848 2.6317 1.85054 2.86612 1.61612C3.10054 1.3817 3.41848 1.25 3.75 1.25H16.25C16.5815 1.25 16.8995 1.3817 17.1339 1.61612C17.3683 1.85054 17.5 2.16848 17.5 2.5V5H16.25V2.5H3.75ZM4.63125 12.1313L3.75 11.25L10 5L16.25 11.25L15.3687 12.1313L10.625 7.39375V18.75H9.375V7.39375L4.63125 12.1313Z"
               fill="#414655"
             ></path>
           </svg>
           <span>Update Book Image</span>
         </div>
-        <button
-          type="button"
-          className={"browseButton"}
-          onClick={() => uploadFileTarget()}
-        >
+        <button type="button" className={"browseButton"}>
           Browse
         </button>
       </div>
