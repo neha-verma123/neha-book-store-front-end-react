@@ -74,13 +74,7 @@ export default function ProductDetails() {
       ) : (
         <Fragment>
           <div className="singlePostWrapper">
-            <img
-              className="singlePostImg"
-              src={
-                "https://media.istockphoto.com/id/173015527/photo/a-single-red-book-on-a-white-surface.jpg?s=612x612&w=0&k=20&c=AeKmdZvg2_bRY2Yct7odWhZXav8CgDtLMc_5_pjSItY="
-              }
-              alt=""
-            />
+            <img className="singlePostImg" src={productData?.image} alt="" />
             <h1 className="singlePostTitle">{productData?.title}</h1>
             <div className="singlePostInfo ">
               <span>{productData?.price}</span>
