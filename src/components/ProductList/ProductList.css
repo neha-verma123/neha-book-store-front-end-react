@@ -1,0 +1,33 @@
+.posts {
+  flex: 9;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 20px;
+}
+.add-button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.add-button {
+  background-color: #728158;
+  padding: 10px 10px;
+  color: #ffffff;
+  border: 1px solid #728158;
+  border-radius: 8px;
+  width: 20%;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background-color: #8fa87c;
+  transform: scale(1.05);
+}
+
+.add-button:active {
+  background-color: #5d6b47;
+  transform: scale(0.95);
+}
