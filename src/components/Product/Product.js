@@ -1,11 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./Product.css";
 
-export default function Product({}) {
+export default function Product({ data }) {
+  const navigate = useNavigate();
   return (
     <div
       className="post"
-      // onClick={() => navigate(`/product-details/${data?.id}`)}
+      key={data?._id}
+      onClick={() => navigate(`/product-details/${data?._id}`)}
     >
       <img
         className="postImg"
@@ -15,11 +17,13 @@ export default function Product({}) {
         alt=""
       />
       <div className="postInfo">
-        <span className="postTitle">title</span>
-        <hr />
-        <span className="postDate">Cetegory</span>
+        <span className="postTitle">{data?.title}</span>
+
+        <span className="postDate">{data?.price}</span>
+
+        <span className="postDate">{data?.category}</span>
       </div>
-      <p className="postDesc">description</p>
+      <p className="postDesc">{data?.description}</p>
     </div>
   );
 }

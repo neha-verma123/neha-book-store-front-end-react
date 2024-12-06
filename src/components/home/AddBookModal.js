@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Modal, Form } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { validationMessage } from "../../constants/validationMessage";
@@ -6,10 +6,17 @@ import { ErrorMessage } from "@hookform/error-message";
 import UploadImage from "../shared/upload/UploadImage";
 import "./AddBookModal.css";
 import { integerInput } from "../../helper/helper";
-import { apiPost } from "../../services/apiFetch";
+import { apiPost, apiPut } from "../../services/apiFetch";
 import { pathObj } from "../../services/pathObj";
 
-const AddBookModal = ({ onHide, show, fetchProductList }) => {
+const AddBookModal = ({
+  onHide,
+  show,
+  fetchProductList,
+  modalType,
+  fetchProjectDetailsApi,
+  productData,
+}) => {
   const {
     register,
     formState: { errors },
@@ -24,6 +31,7 @@ const AddBookModal = ({ onHide, show, fetchProductList }) => {
   const onSubmit = async (data) => {
     const formData = new FormData();
 
+    // Append form data
     formData.append("title", data?.bookTitle || "");
     formData.append("category", data?.bookCategory || "");
     formData.append("price", data?.bookPrice || "");
@@ -32,18 +40,30 @@ const AddBookModal = ({ onHide, show, fetchProductList }) => {
     if (selectedFile) {
       formData.append("image", selectedFile);
     }
+
     try {
-      const res = await apiPost(
-        pathObj.ADD_BOOk,
-        formData,
-        "multipart/form-data"
-      );
+      let res;
+      if (modalType === "edit") {
+        const id = `${productData?._id}`;
+        res = await apiPut(
+          pathObj.Edit_BOOK + id,
+          formData,
+          "multipart/form-data"
+        );
+      } else {
+        res = await apiPost(pathObj.ADD_BOOK, formData, "multipart/form-data");
+      }
+
       if (res.status === 200) {
-        fetchProductList();
+        if (modalType === "edit") {
+          fetchProjectDetailsApi(productData?._id);
+        } else {
+          fetchProductList();
+        }
         onHide();
       }
     } catch (error) {
-      console.error("error:", error);
+      console.error("An error occurred while submitting the form:", error);
     }
   };
 
@@ -55,7 +75,16 @@ const AddBookModal = ({ onHide, show, fetchProductList }) => {
     }
   };
 
-  console.log("preview", preview);
+  useEffect(() => {
+    if (modalType == "edit") {
+      setValue("bookTitle", productData?.title || "");
+      setValue("bookCategory", productData?.category || "");
+      setValue("bookPrice", productData?.price || "");
+      setValue("bookDescription", productData?.description || "");
+      setPreview(productData?.productData);
+      setSelectedFile(productData?.productData);
+    }
+  }, [modalType, productData]);
 
   return (
     <Modal show={show} onHide={onHide} centered>
@@ -171,15 +200,7 @@ const AddBookModal = ({ onHide, show, fetchProductList }) => {
               {preview && (
                 <img
                   className="uploadedImage"
-                  src={
-                    selectedFile && selectedFile.type === "application/pdf"
-                      ? "https://i.pinimg.com/736x/81/97/55/81975517a51651e8f8940759360d01da.jpg"
-                      : selectedFile &&
-                        selectedFile.type ===
-                          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                      ? "https://image.similarpng.com/very-thumbnail/2021/09/Microsoft-Excel-icon-design-on-transparent-background-PNG.png"
-                      : preview
-                  }
+                  src={preview}
                   alt="No_Uploaded_Image"
                 />
               )}

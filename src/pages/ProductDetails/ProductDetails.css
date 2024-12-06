@@ -1,5 +1,6 @@
 .singlePost {
   flex: 9;
+  padding: 20px 20px;
 }
 
 .singlePostWrapper {
@@ -39,12 +40,17 @@
 }
 
 .singlePostInfo {
-  margin-bottom: 20px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+  display: flex;
+  /* justify-content: space-between; */
   font-size: 16px;
   color: #be9656;
   font-family: "Varela Round", Arial, Helvetica, sans-serif;
+  font-weight: 600;
 }
 
 .singlePostAuthor {

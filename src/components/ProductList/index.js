@@ -16,9 +16,9 @@ export default function ProductList() {
   const fetchProductList = async () => {
     try {
       const res = await apiGet(pathObj.PRODUCTS);
+      console.log("res", res);
       if (res.status === 200) {
-        setProductList(res?.data?.products);
-        // dispatch(PRODUCT_LISTING(res?.data?.products));
+        setProductList(res?.data?.results);
       }
     } catch (error) {
       console.error("error:", error);
@@ -29,6 +29,8 @@ export default function ProductList() {
     setVisibleAddBookPopup(!visibleAddBookPopup);
   };
 
+  console.log("productList", productList);
+
   return (
     <div className="posts">
       <div className="add-button-container">
@@ -36,11 +38,14 @@ export default function ProductList() {
           Add New Books In Library
         </button>
       </div>
-      {Array(20)
-        .fill("")
-        .map((el) => {
+      {productList &&
+        productList?.length > 0 &&
+        productList?.map((data) => {
           return (
-            <Product img="https://images.pexels.com/photos/6685428/pexels-photo-6685428.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500" />
+            <Product
+              img="https://images.pexels.com/photos/6685428/pexels-photo-6685428.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+              data={data}
+            />
           );
         })}
 
